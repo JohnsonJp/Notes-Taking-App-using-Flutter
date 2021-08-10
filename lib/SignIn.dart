@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pro_1_notes_taking/SignIn.dart';
+import 'package:flutter_pro_1_notes_taking/Signup.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({ Key? key }) : super(key: key);
+class SignIn extends StatefulWidget {
+  const SignIn({ Key? key }) : super(key: key);
 
   @override
-  _SignUpState createState() => _SignUpState();
+  _SignInState createState() => _SignInState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignInState extends State<SignIn> {
+  
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _usname = new TextEditingController();  
   TextEditingController _email = new TextEditingController();
   TextEditingController _pass = new TextEditingController();
 
@@ -24,8 +24,8 @@ class _SignUpState extends State<SignUp> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(height: MediaQuery.of(context).size.height/35,),
-                Text("Create Account,",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,color: Colors.black),),
-                Text("Signup to get started!,",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 20,color: Colors.black45),),
+                Text("Welcome,",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,color: Colors.black),),
+                Text("Signin to continue!,",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 20,color: Colors.black45),),
           
                 SizedBox(height: MediaQuery.of(context).size.height/10,),
           
@@ -36,42 +36,7 @@ class _SignUpState extends State<SignUp> {
                             width: MediaQuery.of(context).size.width/1.3,
                             child: Column(
                               children: [
-                                TextFormField(
-                                  controller: _usname,
-                                  decoration: InputDecoration(
-                                    hintText: "Full name",
-                                    prefixIcon: Icon(Icons.person),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                      borderSide: BorderSide(
-                                          color: Colors.blue,
-                                          width: 1.5
-                                      ),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                      borderSide: BorderSide(
-                                        color: Colors.blue,
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                    enabledBorder:OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                      borderSide: BorderSide(
-                                        color: Colors.blueGrey.shade400,
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                  ),
-                                  validator: (value){
-                                    if(value!.isEmpty)
-                                    {
-                                      return 'Please Enter your Full Name';
-                                    }                                
-                                    return null;
-                                  },
-                                ),
-          
+    
                                 SizedBox(height: MediaQuery.of(context).size.height/30,),
           
                                 TextFormField(
@@ -176,7 +141,7 @@ class _SignUpState extends State<SignUp> {
                                         borderRadius: BorderRadius.circular(50.0),
                                     ),
                                     textColor:Colors.white,
-                                    child: Text("Create Account"),
+                                    child: Text("Login"),
                                   ),
                                 ),
                               ],
@@ -189,11 +154,11 @@ class _SignUpState extends State<SignUp> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Already have a Account.",style: TextStyle(fontSize: 20),),
+                            Text("New user ? .",style: TextStyle(fontSize: 20),),
                             GestureDetector(
-                              child: Text("Signin",style: TextStyle(fontSize: 20,color: Colors.pink),),
+                              child: Text("Signup",style: TextStyle(fontSize: 20,color: Colors.pink),),
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
                               },
                             ),
                           ],
@@ -205,7 +170,6 @@ class _SignUpState extends State<SignUp> {
       ],
     );
   }
-
 
   Widget _landscapeMode(){
     return Stack(
@@ -222,8 +186,8 @@ class _SignUpState extends State<SignUp> {
                       width: MediaQuery.of(context).size.width/2,
                       child: Column(
                         children: [
-                          Text("Create Account,",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50,color: Colors.black),),
-                          Text("Signup to get started!,",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 40,color: Colors.black45),),
+                          Text("Welcome,",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50,color: Colors.black),),
+                          Text("Signin to continue!,",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 40,color: Colors.black45),),
                         ],
                       ),
                     ),
@@ -235,43 +199,7 @@ class _SignUpState extends State<SignUp> {
                           child: Container(
                             width: MediaQuery.of(context).size.width/3,
                             child: Column(
-                              children: [
-                                TextFormField(
-                                  controller: _usname,
-                                  decoration: InputDecoration(
-                                    hintText: "Full name",
-                                    prefixIcon: Icon(Icons.person),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                      borderSide: BorderSide(
-                                          color: Colors.blue,
-                                          width: 1.5
-                                      ),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                      borderSide: BorderSide(
-                                        color: Colors.blue,
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                    enabledBorder:OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                      borderSide: BorderSide(
-                                        color: Colors.blueGrey.shade400,
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                  ),
-                                  validator: (value){
-                                    if(value!.isEmpty)
-                                    {
-                                      return 'Please Enter your Full Name';
-                                    }                                
-                                    return null;
-                                  },
-                                ),
-                  
+                              children: [                                
                                 SizedBox(height: MediaQuery.of(context).size.height/30,),
                   
                                 TextFormField(
@@ -376,7 +304,7 @@ class _SignUpState extends State<SignUp> {
                                         borderRadius: BorderRadius.circular(50.0),
                                     ),
                                     textColor:Colors.white,
-                                    child: Text("Create Account"),
+                                    child: Text("Login"),
                                   ),
                                 ),
 
@@ -385,11 +313,11 @@ class _SignUpState extends State<SignUp> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text("Already have a Account.",style: TextStyle(fontSize: 20),),
+                                    Text("New here ? .",style: TextStyle(fontSize: 20),),
                                     GestureDetector(
-                                      child: Text("Signin",style: TextStyle(fontSize: 20,color: Colors.pink),),
+                                      child: Text("Signup",style: TextStyle(fontSize: 20,color: Colors.pink),),
                                       onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
                                       },
                                     ),
                                   ],
@@ -408,7 +336,7 @@ class _SignUpState extends State<SignUp> {
       ],
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
