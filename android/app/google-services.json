@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "975982343425",
+    "project_id": "flutter-notes-taking-app",
+    "storage_bucket": "flutter-notes-taking-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975982343425:android:0900db5e8f5416e3421700",
+        "android_client_info": {
+          "package_name": "com.example.flutter_pro_1_notes_taking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "975982343425-3nrnhq5lq0vksq1kt6gghabnjvnmmgab.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_pro_1_notes_taking",
+            "certificate_hash": "ab7f46e938399580c5ef2ae37e66656bce2089cc"
+          }
+        },
+        {
+          "client_id": "975982343425-rsb85n6ko4lv17evnrdipn7rk7oqk098.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQHou1F_bFUp6kfZxIW2RDJpUN3GeKLnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "975982343425-rsb85n6ko4lv17evnrdipn7rk7oqk098.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

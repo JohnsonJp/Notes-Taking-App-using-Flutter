@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pro_1_notes_taking/Homepage.dart';
 import 'package:flutter_pro_1_notes_taking/Signup.dart';
 
 class SignIn extends StatefulWidget {
@@ -24,8 +25,8 @@ class _SignInState extends State<SignIn> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(height: MediaQuery.of(context).size.height/35,),
-                Text("Welcome,",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,color: Colors.black),),
-                Text("Signin to continue!,",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 20,color: Colors.black45),),
+                Text("Welcome,",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white70 : Colors.black)),
+                Text("Signin to continue!,",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 20,color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white : Colors.black45)),
           
                 SizedBox(height: MediaQuery.of(context).size.height/10,),
           
@@ -131,7 +132,7 @@ class _SignInState extends State<SignIn> {
                                     onPressed: (){
                                       if(_formKey.currentState!.validate())
                                       {
-                                        print("successful");
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
                                         return;
                                       }else{
                                         print("UnSuccessfull");
@@ -141,7 +142,7 @@ class _SignInState extends State<SignIn> {
                                         borderRadius: BorderRadius.circular(50.0),
                                     ),
                                     textColor:Colors.white,
-                                    child: Text("Login"),
+                                    child: Text("Login",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                   ),
                                 ),
                               ],
@@ -155,11 +156,14 @@ class _SignInState extends State<SignIn> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("New user ? .",style: TextStyle(fontSize: 20),),
-                            GestureDetector(
-                              child: Text("Signup",style: TextStyle(fontSize: 20,color: Colors.pink),),
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
-                              },
+                            MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                child: Text("Signup",style: TextStyle(fontSize: 20,color: Colors.pink),),
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
+                                },
+                              ),
                             ),
                           ],
                         ),
@@ -294,7 +298,7 @@ class _SignInState extends State<SignIn> {
                                     onPressed: (){
                                       if(_formKey.currentState!.validate())
                                       {
-                                        print("successful");
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
                                         return;
                                       }else{
                                         print("UnSuccessfull");
@@ -304,7 +308,7 @@ class _SignInState extends State<SignIn> {
                                         borderRadius: BorderRadius.circular(50.0),
                                     ),
                                     textColor:Colors.white,
-                                    child: Text("Login"),
+                                    child: Text("Login",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                   ),
                                 ),
 
@@ -314,11 +318,14 @@ class _SignInState extends State<SignIn> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("New here ? .",style: TextStyle(fontSize: 20),),
-                                    GestureDetector(
-                                      child: Text("Signup",style: TextStyle(fontSize: 20,color: Colors.pink),),
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
-                                      },
+                                    MouseRegion(
+                                      cursor: SystemMouseCursors.click,
+                                      child: GestureDetector(
+                                        child: Text("Signup",style: TextStyle(fontSize: 20,color: Colors.pink),),
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
+                                        },
+                                      ),
                                     ),
                                   ],
                                 ),

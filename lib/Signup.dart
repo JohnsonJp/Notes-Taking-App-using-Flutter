@@ -176,7 +176,7 @@ class _SignUpState extends State<SignUp> {
                                         borderRadius: BorderRadius.circular(50.0),
                                     ),
                                     textColor:Colors.white,
-                                    child: Text("Create Account"),
+                                    child: Text("Create Account",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                                   ),
                                 ),
                               ],
@@ -189,12 +189,15 @@ class _SignUpState extends State<SignUp> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Already have a Account.",style: TextStyle(fontSize: 20),),
-                            GestureDetector(
-                              child: Text("Signin",style: TextStyle(fontSize: 20,color: Colors.pink),),
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
-                              },
+                            Text("Already have a Account. ",style: TextStyle(fontSize: 20),),
+                            MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                child: Text("Signin",style: TextStyle(fontSize: 20,color: Colors.pink),),
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
+                                },
+                              ),
                             ),
                           ],
                         ),
@@ -222,8 +225,8 @@ class _SignUpState extends State<SignUp> {
                       width: MediaQuery.of(context).size.width/2,
                       child: Column(
                         children: [
-                          Text("Create Account,",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50,color: Colors.black),),
-                          Text("Signup to get started!,",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 40,color: Colors.black45),),
+                          Text("Create Account,",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50,color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white70 : Colors.black),),
+                          Text("Signup to get started!,",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 40,color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white38 : Colors.black45)),
                         ],
                       ),
                     ),
@@ -376,7 +379,7 @@ class _SignUpState extends State<SignUp> {
                                         borderRadius: BorderRadius.circular(50.0),
                                     ),
                                     textColor:Colors.white,
-                                    child: Text("Create Account"),
+                                    child: Text("Create Account",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                   ),
                                 ),
 
@@ -385,12 +388,15 @@ class _SignUpState extends State<SignUp> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text("Already have a Account.",style: TextStyle(fontSize: 20),),
-                                    GestureDetector(
-                                      child: Text("Signin",style: TextStyle(fontSize: 20,color: Colors.pink),),
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
-                                      },
+                                    Text("Already have a Account. ",style: TextStyle(fontSize: 20),),
+                                    MouseRegion(
+                                      cursor: SystemMouseCursors.click,
+                                      child: GestureDetector(
+                                        child: Text("Signin",style: TextStyle(fontSize: 20,color: Colors.pink),),
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
+                                        },
+                                      ),
                                     ),
                                   ],
                                 ),
