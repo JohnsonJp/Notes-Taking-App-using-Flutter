@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pro_1_notes_taking/SignIn.dart';
+
+import 'Homepage.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({ Key? key }) : super(key: key);
@@ -13,6 +17,24 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _usname = new TextEditingController();  
   TextEditingController _email = new TextEditingController();
   TextEditingController _pass = new TextEditingController();
+
+  Future<bool> register(String email, String password) async {
+  try {
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+    return true;
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'weak-password') {
+      print('The password provided is too weak.');
+    } else if (e.code == 'email-already-in-use') {
+      print('The account already exists for that email.');
+    }
+    return false;
+  } catch (e) {
+    print(e.toString());
+    return false;
+  }
+}
 
   Widget _portraitMode(){
     return Stack(
@@ -163,10 +185,35 @@ class _SignUpState extends State<SignUp> {
                                   ),
                                   child: MaterialButton(                                
                                     color: Colors.transparent,
-                                    onPressed: (){
+                                    onPressed: () async {
                                       if(_formKey.currentState!.validate())
                                       {
-                                        print("successful");
+                                        bool shouldNavigate =
+                                        await register(_email.text, _pass.text);
+                                        if (shouldNavigate) {
+                                          var firebaseUser =  FirebaseAuth.instance.currentUser;
+                                          FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("User Data").add(
+                                              {
+                                                "Username" : _usname.text,
+                                                "Email": _email.text,
+                                                "Password": _pass.text,
+                                                "ID":"",
+                                              }
+                                          ).then((value){
+                                            FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("User Data").doc(value.id).update(
+                                                {
+                                                  "ID":value.id,
+                                                }
+                                                
+                                            );
+                                          });
+                                          Navigator.push(
+                                             context,
+                                             MaterialPageRoute(
+                                               builder: (context) => Homepage(),
+                                             ),
+                                           );
+                                        }
                                         return;
                                       }else{
                                         print("UnSuccessfull");
@@ -366,10 +413,35 @@ class _SignUpState extends State<SignUp> {
                                   ),
                                   child: MaterialButton(                                
                                     color: Colors.transparent,
-                                    onPressed: (){
+                                    onPressed: () async {
                                       if(_formKey.currentState!.validate())
                                       {
-                                        print("successful");
+                                        bool shouldNavigate =
+                                        await register(_email.text, _pass.text);
+                                        if (shouldNavigate) {
+                                          var firebaseUser =  FirebaseAuth.instance.currentUser;
+                                          FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("User Data").add(
+                                              {
+                                                "Username" : _usname.text,
+                                                "Email": _email.text,
+                                                "Password": _pass.text,
+                                                "ID":"",
+                                              }
+                                          ).then((value){
+                                            FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("User Data").doc(value.id).update(
+                                                {
+                                                  "ID":value.id,
+                                                }
+                                                
+                                            );
+                                          });
+                                          Navigator.push(
+                                             context,
+                                             MaterialPageRoute(
+                                               builder: (context) => Homepage(),
+                                             ),
+                                           );
+                                        } 
                                         return;
                                       }else{
                                         print("UnSuccessfull");

@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pro_1_notes_taking/Homepage.dart';
 import 'package:flutter_pro_1_notes_taking/Signup.dart';
+
+import 'Homepage.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({ Key? key }) : super(key: key);
@@ -14,6 +17,17 @@ class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _email = new TextEditingController();
   TextEditingController _pass = new TextEditingController();
+
+  Future<bool> signIn(String email, String password) async {
+  try {
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}
 
   Widget _portraitMode(){
     return Stack(
@@ -129,10 +143,24 @@ class _SignInState extends State<SignIn> {
                                   ),
                                   child: MaterialButton(                                
                                     color: Colors.transparent,
-                                    onPressed: (){
+                                    onPressed: () async {
                                       if(_formKey.currentState!.validate())
                                       {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+                                        var cid;
+                                        bool shouldNavigate =
+                                        await signIn(_email.text, _pass.text);
+                                        if (shouldNavigate) {
+                                        FirebaseFirestore.instance.collection("users")
+                                              .doc(FirebaseAuth.instance.currentUser!.uid).collection("User Data").where('Email',isEqualTo: _email.text).get()
+                                              .then((QuerySnapshot querySnapshot) {
+                                                  querySnapshot.docs.forEach((doc) {
+                                                      cid=doc["ID"];
+                                                  });
+                                              })
+                                              .then((value) => FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("User Data").doc(cid.toString()).update({"Password":_pass.text})
+                                              .then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage())))
+                                             );
+                                        }
                                         return;
                                       }else{
                                         print("UnSuccessfull");
@@ -190,8 +218,8 @@ class _SignInState extends State<SignIn> {
                       width: MediaQuery.of(context).size.width/2,
                       child: Column(
                         children: [
-                          Text("Welcome,",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50,color: Colors.black),),
-                          Text("Signin to continue!,",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 40,color: Colors.black45),),
+                Text("Welcome,",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50,color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white70 : Colors.black)),
+                Text("Signin to continue!,",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 40,color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white : Colors.black45)),
                         ],
                       ),
                     ),
@@ -295,10 +323,24 @@ class _SignInState extends State<SignIn> {
                                   ),
                                   child: MaterialButton(                                
                                     color: Colors.transparent,
-                                    onPressed: (){
+                                    onPressed: () async {
                                       if(_formKey.currentState!.validate())
                                       {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+                                        var cid;
+                                        bool shouldNavigate =
+                                        await signIn(_email.text, _pass.text);
+                                        if (shouldNavigate) {
+                                        FirebaseFirestore.instance.collection("users")
+                                              .doc(FirebaseAuth.instance.currentUser!.uid).collection("User Data").where('Email',isEqualTo: _email.text).get()
+                                              .then((QuerySnapshot querySnapshot) {
+                                                  querySnapshot.docs.forEach((doc) {
+                                                      cid=doc["ID"];
+                                                  });
+                                              })
+                                              .then((value) => FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("User Data").doc(cid.toString()).update({"Password":_pass.text})
+                                              .then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage())))
+                                              );
+                                        }
                                         return;
                                       }else{
                                         print("UnSuccessfull");
