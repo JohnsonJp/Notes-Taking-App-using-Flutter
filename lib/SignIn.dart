@@ -15,6 +15,7 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   
   final _formKey = GlobalKey<FormState>();
+  final _formKeyr = GlobalKey<FormState>();
   TextEditingController _email = new TextEditingController();
   TextEditingController _pass = new TextEditingController();
 
@@ -130,7 +131,86 @@ class _SignInState extends State<SignIn> {
                                     return null;
                                   },
                                 ),
-          
+
+                                SizedBox(height: MediaQuery.of(context).size.height/30,),
+
+                                Row(
+                                  children: [
+                                    Expanded(flex: 1,child: Container()),
+                                    Expanded(child: GestureDetector(
+                                  onTap: () {                                  
+                                    showDialog(context: context, builder: (BuildContext context) => Dialog(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.black87,
+                                        borderRadius: BorderRadius.circular(15.0),
+                                        ),
+                                      height: MediaQuery.of(context).size.height/4,
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context).size.width / 1.5,
+                                              height: MediaQuery.of(context).size.height / 10.5,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(15.0),
+                                              ),
+                                              child: Form(
+                                                key: _formKeyr,
+                                                child: TextFormField(
+                                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                                  controller: _email,
+                                                  decoration: InputDecoration(
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: BorderSide(color: Colors.white, width: 2),
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                    hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
+                                                    hintText: 'Enter Your Email',
+                                                  ),
+                                                  validator: (value) {
+                                                    if (value!.isEmpty ||
+                                                            !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                                                .hasMatch(value)) {
+                                                      return 'Enter a valid email!';
+                                                    }
+                                                    return null;
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Container(
+                                              width: MediaQuery.of(context).size.width / 1.5,
+                                              height: MediaQuery.of(context).size.height / 14,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(15.0),
+                                                color: Colors.black45,
+                                              ),
+                                              child: MaterialButton(
+                                                  onPressed: ()  async {
+                                                    if (_formKeyr.currentState!.validate()) {
+                                                      await FirebaseAuth.instance.sendPasswordResetEmail(email: _email.text);
+                                                      Navigator.pop(context);
+                                                  }
+                                                  },
+                                                  child: Text("Send resend link",style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold,),)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))),);
+                                    },
+                                    child: Text("Forgot Password?",textAlign: TextAlign.center,style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold,),),
+                                ),
+                                    )
+                                  ],
+                                ),
+
                                 SizedBox(height: MediaQuery.of(context).size.height/30,),
           
                                 Container(                              
@@ -312,6 +392,91 @@ class _SignInState extends State<SignIn> {
                                 ),
                   
                                 SizedBox(height: MediaQuery.of(context).size.height/30,),
+
+                                
+                                Row(
+                                  children: [
+                                    Expanded(flex: 1,child: Container(
+                                      
+                                    )),
+                                    Expanded(
+                                      flex: 1,
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: GestureDetector(
+                                  onTap: () {                                  
+                                    showDialog(context: context, builder: (BuildContext context) => Dialog(
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.black38,
+                                          borderRadius: BorderRadius.circular(15.0),
+                                          ),
+                                        height: MediaQuery.of(context).size.height/2.5,
+                                        child: Center(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Form(
+                                                key: _formKeyr,
+                                                child: Container(
+                                                  width: MediaQuery.of(context).size.width/1.5,
+                                                  child: TextFormField(
+                                                    style: TextStyle(color: Colors.white, fontSize: 20),
+                                                    controller: _email,
+                                                    decoration: InputDecoration(
+                                                      enabledBorder: OutlineInputBorder(
+                                                        borderSide: BorderSide(color: Colors.white, width: 2),
+                                                        borderRadius: BorderRadius.circular(10),
+                                                      ),
+                                                      hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
+                                                      hintText: 'Enter Your Email',
+                                                    ),
+                                                    validator: (value) {
+                                                      if (value!.isEmpty ||
+                                                              !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                                                  .hasMatch(value)) {
+                                                        return 'Enter a valid email!';
+                                                      }
+                                                      return null;
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+
+                                              Container(
+                                                width: MediaQuery.of(context).size.width / 1.5,
+                                                height: 60,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(15.0),
+                                                  color: Colors.pink,
+                                                ),
+                                                child: MaterialButton(
+                                                    onPressed: ()  async {
+                                                      if (_formKeyr.currentState!.validate()) {
+                                                        await FirebaseAuth.instance.sendPasswordResetEmail(email: _email.text);
+                                                        Navigator.pop(context);
+                                                    }
+                                                    },
+                                                    child: Text("Send resend link",style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold,),)),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                    ),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))),);
+                                    },
+                                    child: Text("Forgot Password?",textAlign: TextAlign.center,style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold,),),
+                                ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                
+                                SizedBox(height: MediaQuery.of(context).size.height/30,),
                   
                                 Container(                              
                                   height: 60,
@@ -354,7 +519,7 @@ class _SignInState extends State<SignIn> {
                                   ),
                                 ),
 
-                                SizedBox(height: MediaQuery.of(context).size.height/20,),
+                                SizedBox(height: 10,),
 
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,

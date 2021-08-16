@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'Homepage.dart';
 import 'Signup.dart';
 import 'Trash.dart';
+import 'view.dart';
 
 class Account extends StatefulWidget {
   const Account({ Key? key }) : super(key: key);
@@ -20,7 +21,19 @@ class _AccountState extends State<Account> {
   bool _vi=false;
   var us,id;
 
+  //home
+  TextEditingController _sea=new TextEditingController(text: "");
+  var firebaseUser =  FirebaseAuth.instance.currentUser;
+  var title;
+  var content;
+  List keya=[];
+  var sea ="";
+  var _hint;
+  var _date;
+  bool _search=false;
+
   @override
+  // ignore: must_call_super
   void initState() {
     FirebaseFirestore.instance.collection("users")
     .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -62,7 +75,7 @@ class _AccountState extends State<Account> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
                 height: MediaQuery.of(context).size.height/12,
                 child: ElevatedButton(
@@ -78,7 +91,7 @@ class _AccountState extends State<Account> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
                 height: MediaQuery.of(context).size.height/12,
                 child: ElevatedButton(
@@ -218,109 +231,250 @@ class _AccountState extends State<Account> {
       fit: StackFit.expand,
       children: <Widget>[
         new Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Row(),
-            ),
-          Expanded(
-            flex: 9,
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              child: Center(
-                child: Column(children: [
-                  SizedBox(height: 30,),
-                            SizedBox(height: 20,),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              width: MediaQuery.of(context).size.width / 1.2,
-                              height: MediaQuery.of(context).size.height / 10.5,
-                              child: Row(
+      body: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: (_search==false)?
+                      Container(
+                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(flex: 1,child: Container()),
+                            Expanded(child: Text("Home",style: TextStyle(fontSize: 30),),flex: 6,),
+                            Expanded(flex: 1,child: Center(child: IconButton(
+                              onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Trash()));
+                              }, 
+                            icon: Icon(Icons.delete,semanticLabel: "Go to Trash",)))),
+                            Expanded(
+                              flex: 1,
+                              child: Center(child: IconButton(onPressed: (){
+                              if(_search == false){
+                              setState(() {
+                                _search=true;
+                              });
+                              }
+                              else{
+                                setState(() {
+                                  _search=false;
+                                });
+                              }
+                            },
+                          icon: (_search==false)?Icon(Icons.search):Icon(Icons.close),),
+                          ),
+                          ),
+                          Expanded(flex: 1,child: IconButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Account()));                         
+                          }, 
+                          icon: Icon(Icons.person),
+                          ),
+                          ),
+                          ],
+                        ),
+                      ):
+                      Container(
+                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
+                        child: new TextField(
+                                  style: TextStyle(fontSize: 20),
+                                  controller: _sea,                                
+                                  decoration: InputDecoration(
+                                    suffixIcon: IconButton(onPressed: (){
+                                      if(_search == false){
+                                      setState(() {
+                                        _search=true;
+                                      });
+                                      }
+                                      else{
+                                        setState(() {
+                                          _search=false;
+                                        });
+                                      }
+                                    }, icon: (_search==false)?Icon(Icons.search):Icon(Icons.close),),
+                                    hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                                    hintText: 'Search...',
+                                  ),
+                                  onChanged: (String value){
+                                    setState(() {
+                                      sea=value;
+                                    });
+                                  },
+                                ),
+                      ),
+                    ),
+                    Divider(height: 2,color: Colors.grey.shade400,),
+                    Expanded(
+                      flex: 9,
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: (_search==true)
+                            ? FirebaseFirestore.instance.collection("users")
+                            .doc(firebaseUser!.uid)
+                            .collection("notes")
+                            .where("Key", arrayContains: sea)
+                            .snapshots()
+                      
+                            : FirebaseFirestore.instance.collection("users")
+                            .doc(firebaseUser!.uid)
+                            .collection("notes").snapshots(),
+                      
+                        builder: (context, snapshot) {
+                          return (snapshot.connectionState == ConnectionState.waiting)
+                              ? Center(child: CircularProgressIndicator())
+                              : ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot data = snapshot.data!.docs[index];
+                              return Column(
                                 children: [
-                                  Expanded(
-                                    flex: 3,
-                                    child: Container(
-                                    child: Center(
-                                      child: Text("Username    :",style:TextStyle(fontSize: 20)),
+                                  Container(height: MediaQuery.of(context).size.height/12,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black12 : Colors.white12,
                                     ),
-                                  )),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Container(
-                                      child: TextFormField(
-                                        enabled: _vi,
-                                        style: TextStyle(fontSize: 20),
-                                        controller: _usname,
-                                        decoration: InputDecoration(
-                                            border: (_vi==false)?InputBorder.none:OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-                                        ),
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return 'Enter a valid username!';
-                                          }
-                                          return null;
-                                        },
-                                      ),
+                                    child: MaterialButton(onPressed: () {
+                                      setState(() {
+                                        title=data['Title'];
+                                        content=data['content'];
+                                        _hint=data["ID"];
+                                        _date=data["Date & Time"];
+                                      });
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
+                                    }, child: Text(data["Title"],
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    color: Colors.transparent,
                                     ),
                                   ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: IconButton(icon: Icon((_vi == false)?Icons.edit:Icons.update),
-                                        onPressed: (){
-                                        if(_vi == true){
-                                          setState(() {
-                                            _vi = false;
-                                          });
-                                          //
-                                          FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("User Data").doc(id).update({"Username":_usname.text});
-                                          //
-                                        }
-                                        else{
-                                          setState(() {
-                                            _vi = true;
-                                          });
-                                        }
-                                        },
-                                      ),
-                                  ),
+                                  Divider(height: 3,color: Colors.grey.shade400,),
+                                  
                                 ],
-                              ),
-                            ),
-                   SizedBox(height: 20,),
-                   Container(
-                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
-                    width: MediaQuery.of(context).size.width / 1.2,
-                    height: MediaQuery.of(context).size.height / 10.5,
-                    child: Center(child: Text("Email  : "+(FirebaseAuth.instance.currentUser!.email).toString(),style: TextStyle(fontSize: 20),)),
-                   ),
-                   SizedBox(height: 20,),
-                   Container(
-                     width: MediaQuery.of(context).size.width/1.2,
-                     height: MediaQuery.of(context).size.height/10.5,
-                     decoration: BoxDecoration(
-                       gradient: LinearGradient(
-                      colors: [Colors.pink.shade400, Colors.pink.shade300]), 
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: MaterialButton(
-                      child: Center(child: Text("Delete Account",style: TextStyle(fontSize: 20)),),
-                      onPressed: (){
-                        FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).delete().then((value) => FirebaseAuth.instance.currentUser!.delete());
-                      },
-                    ),
-                   ),
-                ],),
-              ),
-            ),
+                  ],
+                )
+                ),
+                Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(60, 200, 100, 60),
+                  child: Container(
+                    child: Column(children: [
+                      SizedBox(height: 30,),
+                                SizedBox(height: 20,),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  width: MediaQuery.of(context).size.width / 1.2,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 3,
+                                        child: Container(
+                                        child: Center(
+                                          child: Text("Username    :",style:TextStyle(fontSize: 20)),
+                                        ),
+                                      )),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Container(
+                                          child: TextFormField(
+                                            enabled: _vi,
+                                            style: TextStyle(fontSize: 20),
+                                            controller: _usname,
+                                            decoration: InputDecoration(
+                                                border: (_vi==false)?InputBorder.none:OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                                            ),
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Enter a valid username!';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: IconButton(icon: Icon((_vi == false)?Icons.edit:Icons.update),
+                                            onPressed: (){
+                                            if(_vi == true){
+                                              setState(() {
+                                                _vi = false;
+                                              });
+                                              //
+                                              FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("User Data").doc(id).update({"Username":_usname.text});
+                                              //
+                                            }
+                                            else{
+                                              setState(() {
+                                                _vi = true;
+                                              });
+                                            }
+                                            },
+                                          ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                       SizedBox(height: 20,),
+                       Container(
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        width: MediaQuery.of(context).size.width / 1.2,
+                        height: MediaQuery.of(context).size.height / 10.5,
+                        child: Center(child: Text("Email  : "+(FirebaseAuth.instance.currentUser!.email).toString(),style: TextStyle(fontSize: 20),)),
+                       ),
+                       SizedBox(height: 20,),
+                       Container(
+                         width: MediaQuery.of(context).size.width/1.2,
+                         height: MediaQuery.of(context).size.height/10.5,
+                         decoration: BoxDecoration(
+                           gradient: LinearGradient(
+                          colors: [Colors.pink.shade400, Colors.pink.shade300]), 
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: MaterialButton(
+                          child: Center(child: Text("Delete Account",style: TextStyle(fontSize: 20)),),
+                          onPressed: (){
+                            FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).delete().then((value) => FirebaseAuth.instance.currentUser!.delete());
+                          },
+                        ),
+                       ),
+                       SizedBox(height: 10,),
+                       Container(
+                         width: MediaQuery.of(context).size.width/1.2,
+                         height: MediaQuery.of(context).size.height/10.5,
+                         decoration: BoxDecoration(
+                           gradient: LinearGradient(
+                          colors: [Colors.pink.shade400, Colors.pink.shade300]), 
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: MaterialButton(
+                          child: Center(child: Text("Logout",style: TextStyle(fontSize: 20)),),
+                          onPressed: () async {
+                              await _auth.signOut();
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
+                          },
+                        ),
+                       ),
+                    ],),),
+                ),
+                ),
+            ],
           ),
-        ],
-      ),
     ),
       ],
     );

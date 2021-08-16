@@ -46,9 +46,8 @@ class _SignUpState extends State<SignUp> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(height: MediaQuery.of(context).size.height/35,),
-                Text("Create Account,",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,color: Colors.black),),
-                Text("Signup to get started!,",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 20,color: Colors.black45),),
-          
+                          Text("Create Account,",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50,color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white70 : Colors.black),),
+                          Text("Signup to get started!,",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 40,color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white38 : Colors.black45)),          
                 SizedBox(height: MediaQuery.of(context).size.height/10,),
           
                 Form(

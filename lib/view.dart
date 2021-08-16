@@ -28,6 +28,7 @@ class _ViewState extends State<View> {
   TextEditingController _title=new TextEditingController();
   TextEditingController _content=new TextEditingController();
   var id;
+  List keya=[];
   final FirebaseAuth _auth = FirebaseAuth.instance;
   //home
   TextEditingController _sea=new TextEditingController(text: "");
@@ -99,7 +100,7 @@ class _ViewState extends State<View> {
                       "Title" : _title.text,
                       "content":_content.text,
                       "Date & Time":DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
-                      "Key":key,
+                      "Key":widget.key,
                     }
                 );
                 //
@@ -386,8 +387,7 @@ class _ViewState extends State<View> {
                       flex: 1,
                       child: (_search==false)?
                       Container(
-                        color: Color(0XFF5B04BC),
-                        child: Row(
+                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,                      child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -425,32 +425,41 @@ class _ViewState extends State<View> {
                           ],
                         ),
                       ):
-                      new TextField(
-                                style: TextStyle(fontSize: 20),
-                                controller: _sea,                                
-                                decoration: InputDecoration(
-                                  suffixIcon: IconButton(onPressed: (){
-                                    if(_search == false){
-                                    setState(() {
-                                      _search=true;
-                                    });
-                                    }
-                                    else{
+                      Container(
+                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
+                        child: new TextField(
+                                  style: TextStyle(fontSize: 20),
+                                  controller: _sea,                                
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                    suffixIcon: IconButton(onPressed: (){
+                                      if(_search == false){
                                       setState(() {
-                                        _search=false;
+                                        _search=true;
                                       });
-                                    }
-                                  }, icon: (_search==false)?Icon(Icons.search):Icon(Icons.close),),
-                                  hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                                  hintText: 'Search...',
+                                      }
+                                      else{
+                                        setState(() {
+                                          _search=false;
+                                        });
+                                      }
+                                    }, icon: (_search==false)?Icon(Icons.search):Icon(Icons.close),),
+                                    hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                                    hintText: 'Search...',
+                                  ),
+                                  onChanged: (String value){
+                                    setState(() {
+                                      sea=value;
+                                    });
+                                  },
                                 ),
-                                onChanged: (String value){
-                                  setState(() {
-                                    sea=value;
-                                  });
-                                },
-                              ),
+                      ),
                     ),
+                    Divider(height: 2,color: Colors.grey.shade400,),
                     Expanded(
                       flex: 9,
                       child: StreamBuilder<QuerySnapshot>(
@@ -474,26 +483,27 @@ class _ViewState extends State<View> {
                               DocumentSnapshot data = snapshot.data!.docs[index];
                               return Column(
                                 children: [
-                                  Divider(height: 2,color: Colors.pink,),
                                   Container(height: MediaQuery.of(context).size.height/12,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                      color: Colors.black12,
-                                      borderRadius: BorderRadius.circular(20.0),
+                                      color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black12 : Colors.white12,
                                     ),
-                                    child: ElevatedButton(onPressed: () {
+                                    child: MaterialButton(onPressed: () {
                                       setState(() {
                                         title=data['Title'];
                                         content=data['content'];
                                         _hint=data["ID"];
                                         _date=data["Date & Time"];
                                       });
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true,)));
                                     }, child: Text(data["Title"],
                                       style: TextStyle(fontSize: 20),
                                     ),
+                                    color: Colors.transparent,
                                     ),
                                   ),
+                                  Divider(height: 3,color: Colors.grey.shade400,),
+                                  
                                 ],
                               );
                             },
@@ -563,6 +573,7 @@ class _ViewState extends State<View> {
                                 },
                               ),
                     ),
+                    Divider(height: 2,color: Colors.grey.shade400,),
                     Expanded(
                       flex: 9,
                       child: Container(
@@ -587,25 +598,26 @@ class _ViewState extends State<View> {
                               DocumentSnapshot data = snapshot.data!.docs[index];
                               return Column(
                                 children: [
-                                  Divider(height: 2),
                                   Container(height: MediaQuery.of(context).size.height/12,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20.0),
+                                      color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black45 : Colors.white38,
                                     ),
-                                    child: ElevatedButton(onPressed: () {
+                                    child: MaterialButton(onPressed: () {
                                       setState(() {
                                         _title.text=data['Title'];
                                         _content.text=data['content'];
                                         _hint=data["ID"];
                                         _date=data["Date & Time"];
                                       });
-                                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
                                     }, child: Text(data["Title"],
                                       style: TextStyle(fontSize: 20),
                                     ),
+                                    color: Colors.transparent,
                                     ),
                                   ),
+                                  Divider(height: 2,color: Colors.grey.shade400,),
                                 ],
                               );
                             },
@@ -624,110 +636,144 @@ class _ViewState extends State<View> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: (widget.where==true)?Row(
-                          children: [
-                            Expanded(
-                              flex: 9,
-                              child: Container(),
+                        child: (widget.where==true)?Container(
+                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 9,
+                                child: Container(),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: IconButton(onPressed: (){
+                                  var firebaseUser =  FirebaseAuth.instance.currentUser;
+                                  //
+                                  List<String> key = [];
+                                String temp = "";
+                                for (int i = 0; i < _title.text.length; i++) {
+                                  temp = temp + _title.text[i].toUpperCase();
+                                  key.add(temp);
+                                }
+                                temp="";
+                                for (int i = 0; i < _title.text.length; i++) {
+                                  temp = temp + _title.text[i].toLowerCase();
+                                  key.add(temp);
+                                }
+                                  //
+                                  FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("Trash").add(
+                                      {
+                                        "Title" : _title.text,
+                                        "content":_content.text,
+                                        "Date & Time":DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
+                                        "ID":"",
+                                        "key":key,
+                                      }).then((value) => FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("Trash").doc(value.id).update(
+                                      {
+                                        "ID":value.id,
+                                      }).then((value) => FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("notes").doc(id).delete()),
+                                  );
+                                  
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+                                  }, icon: Icon(Icons.delete)),
+                                ),
+                              Expanded(
+                                flex: 1,
+                                child: IconButton(onPressed: () async {
+                                  if(_edit == true){
+                                  setState(() {
+                                    _edit =false;
+                                  });
+                                  //
+                                        List<String> key = [];
+                                        String temp = "";
+                                        for (int i = 0; i < _title.text.length; i++) {
+                                          temp = temp + _title.text[i].toUpperCase();
+                                          key.add(temp);
+                                        }
+                                        temp="";
+                                        for (int i = 0; i < _title.text.length; i++) {
+                                          temp = temp + _title.text[i].toLowerCase();
+                                          key.add(temp);
+                                        }
+                                        //
+                                  //
+                                  var firebaseUser =  FirebaseAuth.instance.currentUser;
+                                  FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("notes").doc(id).update(
+                                      {
+                                        "Title" : _title.text,
+                                        "content":_content.text,
+                                        "Date & Time":DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
+                                        "Key":key,
+                                      }
+                                  );
+                                  //
+                                }
+                                else{
+                                  setState(() {
+                                    _edit =true;
+                                  });
+                                  print("True");
+                                }
+                                },
+                                  icon: (_edit == false)?Icon(Icons.edit):Icon(Icons.update),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                        :Container(
+                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 9,
+                                child: Container(),
                               ),
                               Expanded(
                                 flex: 1,
                                 child: IconButton(onPressed: (){
                                 var firebaseUser =  FirebaseAuth.instance.currentUser;
-                                FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("Trash").add(
-                                    {
-                                      "Title" : _title.text,
-                                      "content":_content.text,
-                                      "Date & Time":DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
-                                      "ID":"",
-                                    }).then((value) => FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("Trash").doc(value.id).update(
-                                    {
-                                      "ID":value.id,
-                                    }).then((value) => FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("notes").doc(id).delete()),
-                                );
-                                
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
-                                                          }, icon: Icon(Icons.delete)),
+                                FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("Trash").doc(id).delete();
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Trash()));
+                              }, icon: Icon(Icons.delete)),
                               ),
                             Expanded(
                               flex: 1,
                               child: IconButton(onPressed: () async {
-                                if(_edit == true){
-                                setState(() {
-                                  _edit =false;
-                                });
-                                //
-                                      List<String> key = [];
-                                      String temp = "";
-                                      for (int i = 0; i < _title.text.length; i++) {
-                                        temp = temp + _title.text[i].toUpperCase();
-                                        key.add(temp);
+                                  //
+                                  List<String> key = [];
+                                String temp = "";
+                                for (int i = 0; i < _title.text.length; i++) {
+                                  temp = temp + _title.text[i].toUpperCase();
+                                  key.add(temp);
+                                }
+                                temp="";
+                                for (int i = 0; i < _title.text.length; i++) {
+                                  temp = temp + _title.text[i].toLowerCase();
+                                  key.add(temp);
+                                }
+                                  //
+                                  var firebaseUser =  FirebaseAuth.instance.currentUser;
+                                  FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("notes").add(
+                                      {
+                                        "Title" : _title.text,
+                                        "content":_content.text,
+                                        "Date & Time":DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
+                                        "ID":"",
+                                        "Key":key,
                                       }
-                                      temp="";
-                                      for (int i = 0; i < _title.text.length; i++) {
-                                        temp = temp + _title.text[i].toLowerCase();
-                                        key.add(temp);
-                                      }
-                                      //
-                                //
-                                var firebaseUser =  FirebaseAuth.instance.currentUser;
-                                FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("notes").doc(id).update(
-                                    {
-                                      "Title" : _title.text,
-                                      "content":_content.text,
-                                      "Date & Time":DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
-                                      "Key":key,
-                                    }
-                                );
-                                //
-                              }
-                              else{
-                                setState(() {
-                                  _edit =true;
-                                });
-                                print("True");
-                              }
+                                  ).then((value) =>
+                                  FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("notes").doc(value.id).update({"ID":value.id})
+                                  ).then((value) => FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("Trash").doc(id).delete());
+                                  //
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Trash()));
                               },
-                                icon: (_edit == false)?Icon(Icons.edit):Icon(Icons.update),
+                                icon: Icon(Icons.update),
                               ),
                             ),
-                          ],
-                        )
-                        :Row(
-                          children: [
-                            Expanded(
-                              flex: 9,
-                              child: Container(),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: IconButton(onPressed: (){
-                              var firebaseUser =  FirebaseAuth.instance.currentUser;
-                              FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("Trash").doc(id).delete();
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Trash()));
-                                                      }, icon: Icon(Icons.delete)),
-                            ),
-                          Expanded(
-                            flex: 1,
-                            child: IconButton(onPressed: () async {
-                                //
-                                var firebaseUser =  FirebaseAuth.instance.currentUser;
-                                FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("notes").add(
-                                    {
-                                      "Title" : _title.text,
-                                      "content":_content.text,
-                                      "Date & Time":DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
-                                      "ID":"",
-                                    }
-                                ).then((value) =>
-                                FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("notes").doc(value.id).update({"ID":value.id})
-                                ).then((value) => FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("Trash").doc(id).delete());
-                                //
-                            },
-                              icon: Icon(Icons.update),
-                            ),
+                            ],
                           ),
-                          ],
                         ),
 
                       ),
@@ -746,10 +792,11 @@ class _ViewState extends State<View> {
                                     width: MediaQuery.of(context).size.width / 1.4,
                                     height: MediaQuery.of(context).size.height / 12,
                                     decoration: BoxDecoration(
+                                      color: Colors.transparent,
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.all(15.0),
                                       child: Text("Last edited time : "+'''
                                       '''+widget.date,textAlign:TextAlign.center,style: TextStyle(fontSize: 20,),),
                                     ),
@@ -757,45 +804,32 @@ class _ViewState extends State<View> {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width / 1.4,
-                                    height: MediaQuery.of(context).size.height / 12,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    child: TextFormField(
-                                      style: TextStyle(fontSize: 20),
-                                      controller: _title,
-                                      enabled: _edit,
-                                      decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(width: 2.5),
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                                        hintText: 'Title',
+                                  TextFormField(
+                                    style: TextStyle(fontSize: 20),
+                                    controller: _title,
+                                    enabled: _edit,
+                                    
+                                    decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 2.5),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
+                                      hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                                      hintText: 'Title',
                                     ),
                                   ),
                                   SizedBox(height: 10,),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width / 1.4,
-                                    height: MediaQuery.of(context).size.height / 10,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    child: TextFormField(
-                                      style: TextStyle(fontSize: 20),
-                                      enabled: _edit,
-                                      controller: _content,
-                                      decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(width: 2.5),
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                                        hintText: 'Content',
+                                  TextFormField(
+                                    style: TextStyle(fontSize: 20),
+                                    enabled: _edit,
+                                    controller: _content,
+                                    decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 2.5),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
+                                      hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                                      hintText: 'Content',
                                     ),
                                   ),
                                   SizedBox(height: 10,),
@@ -813,10 +847,11 @@ class _ViewState extends State<View> {
                                     width: MediaQuery.of(context).size.width / 1.4,
                                     height: MediaQuery.of(context).size.height / 12,
                                     decoration: BoxDecoration(
+                                      color: Colors.transparent,
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.all(15.0),
                                       child: Text("Last edited time : "+'''
                                       '''+widget.date,textAlign:TextAlign.center,style: TextStyle(fontSize: 20,),),
                                     ),
@@ -824,45 +859,31 @@ class _ViewState extends State<View> {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width / 1.4,
-                                    height: MediaQuery.of(context).size.height / 12,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    child: TextFormField(
-                                      style: TextStyle(fontSize: 20),
-                                      controller: _title,
-                                      enabled: _edit,
-                                      decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(width: 2.5),
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                                        hintText: 'Title',
+                                  TextFormField(
+                                    style: TextStyle(fontSize: 20),
+                                    controller: _title,
+                                    enabled: _edit,
+                                    decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 2.5),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
+                                      hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                                      hintText: 'Title',
                                     ),
                                   ),
                                   SizedBox(height: 10,),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width / 1.4,
-                                    height: MediaQuery.of(context).size.height / 10,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    child: TextFormField(
-                                      style: TextStyle(fontSize: 20),
-                                      enabled: _edit,
-                                      controller: _content,
-                                      decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(width: 2.5),
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                                        hintText: 'Content',
+                                  TextFormField(
+                                    style: TextStyle(fontSize: 20),
+                                    enabled: _edit,
+                                    controller: _content,
+                                    decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 2.5),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
+                                      hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                                      hintText: 'Content',
                                     ),
                                   ),
                                   SizedBox(height: 10,),

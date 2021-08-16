@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'Account.dart';
 import 'Add.dart';
@@ -23,6 +22,7 @@ class _HomepageState extends State<Homepage> {
   var title;
   var content;
   var sea ="";
+  List keya=[];
   var _hint;
   var _date;
   bool _search=false;
@@ -221,8 +221,7 @@ class _HomepageState extends State<Homepage> {
                       flex: 1,
                       child: (_search==false)?
                       Container(
-                        color: Color(0XFF5B04BC),
-                        child: Row(
+                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,                      child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -260,32 +259,36 @@ class _HomepageState extends State<Homepage> {
                           ],
                         ),
                       ):
-                      new TextField(
-                                style: TextStyle(fontSize: 20),
-                                controller: _sea,                                
-                                decoration: InputDecoration(
-                                  suffixIcon: IconButton(onPressed: (){
-                                    if(_search == false){
-                                    setState(() {
-                                      _search=true;
-                                    });
-                                    }
-                                    else{
+                      Container(
+                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
+                        child: new TextField(
+                                  style: TextStyle(fontSize: 20),
+                                  controller: _sea,                                
+                                  decoration: InputDecoration(
+                                    suffixIcon: IconButton(onPressed: (){
+                                      if(_search == false){
                                       setState(() {
-                                        _search=false;
+                                        _search=true;
                                       });
-                                    }
-                                  }, icon: (_search==false)?Icon(Icons.search):Icon(Icons.close),),
-                                  hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                                  hintText: 'Search...',
+                                      }
+                                      else{
+                                        setState(() {
+                                          _search=false;
+                                        });
+                                      }
+                                    }, icon: (_search==false)?Icon(Icons.search):Icon(Icons.close),),
+                                    hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                                    hintText: 'Search...',
+                                  ),
+                                  onChanged: (String value){
+                                    setState(() {
+                                      sea=value;
+                                    });
+                                  },
                                 ),
-                                onChanged: (String value){
-                                  setState(() {
-                                    sea=value;
-                                  });
-                                },
-                              ),
+                      ),
                     ),
+                    Divider(height: 2,color: Colors.grey.shade400,),
                     Expanded(
                       flex: 9,
                       child: StreamBuilder<QuerySnapshot>(
@@ -309,14 +312,12 @@ class _HomepageState extends State<Homepage> {
                               DocumentSnapshot data = snapshot.data!.docs[index];
                               return Column(
                                 children: [
-                                  Divider(height: 2,color: Colors.pink,),
                                   Container(height: MediaQuery.of(context).size.height/12,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                      color: Colors.black12,
-                                      borderRadius: BorderRadius.circular(20.0),
+                                      color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black12 : Colors.white12,
                                     ),
-                                    child: ElevatedButton(onPressed: () {
+                                    child: MaterialButton(onPressed: () {
                                       setState(() {
                                         title=data['Title'];
                                         content=data['content'];
@@ -327,8 +328,11 @@ class _HomepageState extends State<Homepage> {
                                     }, child: Text(data["Title"],
                                       style: TextStyle(fontSize: 20),
                                     ),
+                                    color: Colors.transparent,
                                     ),
                                   ),
+                                  Divider(height: 3,color: Colors.grey.shade400,),
+                                  
                                 ],
                               );
                             },
