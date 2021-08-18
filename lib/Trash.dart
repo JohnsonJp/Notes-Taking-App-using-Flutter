@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pro_1_notes_taking/view.dart';
 
 import 'Account.dart';
 import 'Homepage.dart';
 import 'Signup.dart';
+import 'view.dart';
 
 class Trash extends StatefulWidget {
   const Trash({ Key? key }) : super(key: key);
@@ -16,7 +16,7 @@ class Trash extends StatefulWidget {
 
 class _TrashState extends State<Trash> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  TextEditingController _sea=new TextEditingController(text: "");
+  TextEditingController _sea=new TextEditingController();
   var firebaseUser =  FirebaseAuth.instance.currentUser;
   var title;
   var content;
@@ -79,11 +79,9 @@ class _TrashState extends State<Trash> {
           child: ListView(
             children: [
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.black12,
-                      ),
+                child: MaterialButton(
                   onPressed: () { 
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Account()));
@@ -96,13 +94,14 @@ class _TrashState extends State<Trash> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
                   onPressed: () { 
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
                    },
                   child: Row(
                     children: [
@@ -112,13 +111,11 @@ class _TrashState extends State<Trash> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black12,
-                  ),
+                child: MaterialButton(
                   onPressed: () {
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Trash()));
@@ -131,10 +128,11 @@ class _TrashState extends State<Trash> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
                   onPressed: () async {
                     await _auth.signOut();
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
@@ -147,7 +145,6 @@ class _TrashState extends State<Trash> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
             ],
       ),
         ),
@@ -174,28 +171,30 @@ class _TrashState extends State<Trash> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 DocumentSnapshot data = snapshot.data!.docs[index];
-                return Column(
-                  children: [
-                    Divider(height: 2),
-                    Container(height: MediaQuery.of(context).size.height/12,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Divider(height: 2,color: Colors.grey.shade400,),
+                      Container(height: MediaQuery.of(context).size.height/12,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
+                        ),
+                        child: MaterialButton(onPressed: () {
+                          setState(() {
+                            title=data['Title'];
+                            content=data['content'];
+                            _hint=data["ID"];
+                            _date=data["Date & Time"];
+                          });
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,false)));
+                        }, child: Text(data["Title"],
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        ),
                       ),
-                      child: ElevatedButton(onPressed: () {
-                        setState(() {
-                          title=data['Title'];
-                          content=data['content'];
-                          _hint=data["ID"];
-                          _date=data["Date & Time"];
-                        });
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,false)));
-                      }, child: Text(data["Title"],
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               },
             );
@@ -217,22 +216,23 @@ class _TrashState extends State<Trash> {
             children: [
               Expanded(
                 flex: 1,
-                child: Container(
-                  color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: (_search==false)?
-                        Row(
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: (_search==false)?
+                      Container(
+                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
+                          child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Expanded(flex: 1,child: Container()),
                             Expanded(child: Text("Trash",style: TextStyle(fontSize: 30),),flex: 6,),
-                            Expanded(flex: 1,child: Center(child: IconButton(onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
-                            }, 
+                            Expanded(flex: 1,child: Center(child: IconButton(
+                              onPressed: (){
+                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
+                              }, 
                             icon: Icon(Icons.home,semanticLabel: "Go to Home",)))),
                             Expanded(
                               flex: 1,
@@ -252,11 +252,20 @@ class _TrashState extends State<Trash> {
                           ),
                           ),
                           ],
-                        ):
-                        new TextField(
+                        ),
+                      ):
+                      Container(
+                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
+                        child: new TextField(
                                   style: TextStyle(fontSize: 20),
                                   controller: _sea,                                
                                   decoration: InputDecoration(
+                                    
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
                                     suffixIcon: IconButton(onPressed: (){
                                       if(_search == false){
                                       setState(() {
@@ -279,35 +288,36 @@ class _TrashState extends State<Trash> {
                                   },
                                 ),
                       ),
-                      Divider(height: 2,color: Colors.grey.shade400,),
-                      Expanded(
-                        flex: 9,
-                        child: Container(
-                        child:StreamBuilder<QuerySnapshot>(
-                          stream: (_search==true)
-                              ? FirebaseFirestore.instance.collection("users")
-                              .doc(firebaseUser!.uid)
-                              .collection("Trash")
-                              .where("Key", arrayContains: sea)
-                              .snapshots()
-                        
-                              : FirebaseFirestore.instance.collection("users")
-                              .doc(firebaseUser!.uid)
-                              .collection("Trash").snapshots(),
-                        
-                          builder: (context, snapshot) {
-                            return (snapshot.connectionState == ConnectionState.waiting)
-                                ? Center(child: CircularProgressIndicator())
-                                : ListView.builder(
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) {
-                                DocumentSnapshot data = snapshot.data!.docs[index];
-                                return Column(
+                    ),
+                    Divider(height: 2,color: Colors.grey.shade400,),
+                    Expanded(
+                      flex: 9,
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: (_search==true)
+                            ? FirebaseFirestore.instance.collection("users")
+                            .doc(firebaseUser!.uid)
+                            .collection("Trash")
+                            .where("Key", arrayContains: sea)
+                            .snapshots()
+                      
+                            : FirebaseFirestore.instance.collection("users")
+                            .doc(firebaseUser!.uid)
+                            .collection("Trash").snapshots(),
+                      
+                        builder: (context, snapshot) {
+                          return (snapshot.connectionState == ConnectionState.waiting)
+                              ? Center(child: CircularProgressIndicator())
+                              : ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot data = snapshot.data!.docs[index];
+                              return SingleChildScrollView(
+                                child: Column(
                                   children: [
                                     Container(height: MediaQuery.of(context).size.height/12,
                                       width: double.infinity,
                                       decoration: BoxDecoration(
-                                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
+                                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black12 : Colors.white12,
                                       ),
                                       child: MaterialButton(onPressed: () {
                                         setState(() {
@@ -320,19 +330,20 @@ class _TrashState extends State<Trash> {
                                       }, child: Text(data["Title"],
                                         style: TextStyle(fontSize: 20),
                                       ),
+                                      color: Colors.transparent,
                                       ),
                                     ),
-                                    Divider(height: 2,color: Colors.grey.shade400,),
+                                    Divider(height: 3,color: Colors.grey.shade400,),
+                                    
                                   ],
-                                );
-                              },
-                            );
-                          },
-                        ),
-                                          ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 )
                 ),
                 Expanded(

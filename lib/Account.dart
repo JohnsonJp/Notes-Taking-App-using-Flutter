@@ -54,6 +54,7 @@ class _AccountState extends State<Account> {
       children: <Widget>[
         new Scaffold(
       appBar: AppBar(
+        backgroundColor: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
         title: Text("Account")
       ),
       drawer: Drawer(
@@ -61,8 +62,10 @@ class _AccountState extends State<Account> {
           child: ListView(
             children: [
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
+                  
                   onPressed: () { 
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Account()));
@@ -77,11 +80,12 @@ class _AccountState extends State<Account> {
               ),
               Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
                   onPressed: () { 
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
                    },
                   child: Row(
                     children: [
@@ -93,8 +97,9 @@ class _AccountState extends State<Account> {
               ),
               Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
                   onPressed: () {
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Trash()));
@@ -107,10 +112,11 @@ class _AccountState extends State<Account> {
                   ),
                 ),
               ),
-              Divider(height: 2),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
                   onPressed: () async {
                     await _auth.signOut();
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
@@ -123,7 +129,7 @@ class _AccountState extends State<Account> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400,),
             ],
       ),
         ),
@@ -131,95 +137,96 @@ class _AccountState extends State<Account> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        child: Center(
-          child: Column(children: [
-            SizedBox(height: 30,),
-             
-                      SizedBox(height: 20,),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        width: MediaQuery.of(context).size.width / 1.2,
-                        height: MediaQuery.of(context).size.height / 10.5,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          SizedBox(height: 30,),
+           
+                    SizedBox(height: 20,),
+                    Container(
+                      color: Colors.transparent,
+                      width: MediaQuery.of(context).size.width / 1.2,
+                      height: MediaQuery.of(context).size.height / 10.5,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              color: Colors.transparent,
                               child: Center(
-                                child: Text("Username    :",style:TextStyle(fontSize: 20)),
-                              ),
-                            )),
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                child: TextFormField(
-                                  enabled: _vi,
-                                  style: TextStyle(fontSize: 20),
-                                  controller: _usname,
-                                  decoration: InputDecoration(
-			                            border: (_vi==false)?InputBorder.none:OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-                                  ),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Enter a valid username!';
-                                    }
-                                    return null;
-                                  },
+                              child: Text("Username    :",style:TextStyle(fontSize: 20)),
+                            ),
+                          )),
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              color: Colors.transparent,
+                              child: TextFormField(
+                                enabled: _vi,
+                                style: TextStyle(fontSize: 20),
+                                controller: _usname,
+                                decoration: InputDecoration(
+			                            border: (_vi==false)?InputBorder.none:UnderlineInputBorder(borderRadius: BorderRadius.circular(15)),
                                 ),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Enter a valid username!';
+                                  }
+                                  return null;
+                                },
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: IconButton(icon: Icon((_vi == false)?Icons.edit:Icons.update),
-                                  onPressed: (){
-                                  if(_vi == true){
-                                    setState(() {
-                                      _vi = false;
-                                    });
-                                    //
-                                    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("User Data").doc(id).update({"Username":_usname.text});
-                                    //
-                                  }
-                                  else{
-                                    setState(() {
-                                      _vi = true;
-                                    });
-                                  }
-                                  },
-                                ),
-                            ),
-                          ],
-                        ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: IconButton(icon: Icon((_vi == false)?Icons.edit:Icons.update),
+                                onPressed: (){
+                                if(_vi == true){
+                                  setState(() {
+                                    _vi = false;
+                                  });
+                                  //
+                                  FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("User Data").doc(id).update({"Username":_usname.text});
+                                  //
+                                }
+                                else{
+                                  setState(() {
+                                    _vi = true;
+                                  });
+                                }
+                                },
+                              ),
+                          ),
+                        ],
                       ),
-             SizedBox(height: 20,),
-             Container(
-               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              width: MediaQuery.of(context).size.width / 1.2,
-              height: MediaQuery.of(context).size.height / 10.5,
-              child: Center(child: Text("Email  : "+(FirebaseAuth.instance.currentUser!.email).toString(),style: TextStyle(fontSize: 20),)),
-             ),
-             SizedBox(height: 20,),
-             Container(
-               width: MediaQuery.of(context).size.width/1.2,
-               height: MediaQuery.of(context).size.height/10.5,
-               decoration: BoxDecoration(
-                 gradient: LinearGradient(
-                colors: [Colors.pink.shade400, Colors.pink.shade300]), 
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: MaterialButton(
-                child: Center(child: Text("Delete Account",style: TextStyle(fontSize: 20)),),
-                onPressed: (){
-                  FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).delete().then((value) => FirebaseAuth.instance.currentUser!.delete());
-                },
-              ),
-             ),
-          ],),
-        ),
+                    ),
+           SizedBox(height: 20,),
+           Container(
+             decoration: BoxDecoration(
+              color: Colors.transparent, 
+               borderRadius: BorderRadius.circular(15),
+            ),
+            width: MediaQuery.of(context).size.width / 1.2,
+            height: MediaQuery.of(context).size.height / 10.5,
+            child: Center(child: Text("Email  : "+(FirebaseAuth.instance.currentUser!.email).toString(),style: TextStyle(fontSize: 20),)),
+           ),
+           SizedBox(height: 20,),
+           Container(
+             width: MediaQuery.of(context).size.width/1.2,
+             height: MediaQuery.of(context).size.height/10.5,
+             decoration: BoxDecoration(
+               gradient: LinearGradient(
+              colors: [Colors.pink.shade400, Colors.pink.shade300]), 
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: MaterialButton(
+              child: Center(child: Text("Delete Account",style: TextStyle(fontSize: 20)),),
+              onPressed: (){
+                FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).delete().then((value) => FirebaseAuth.instance.currentUser!.delete());
+              },
+            ),
+           ),
+        ],),
       ),
     ),
       ],
@@ -331,30 +338,32 @@ class _AccountState extends State<Account> {
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               DocumentSnapshot data = snapshot.data!.docs[index];
-                              return Column(
-                                children: [
-                                  Container(height: MediaQuery.of(context).size.height/12,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black12 : Colors.white12,
+                              return SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Container(height: MediaQuery.of(context).size.height/12,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black12 : Colors.white12,
+                                      ),
+                                      child: MaterialButton(onPressed: () {
+                                        setState(() {
+                                          title=data['Title'];
+                                          content=data['content'];
+                                          _hint=data["ID"];
+                                          _date=data["Date & Time"];
+                                        });
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
+                                      }, child: Text(data["Title"],
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      color: Colors.transparent,
+                                      ),
                                     ),
-                                    child: MaterialButton(onPressed: () {
-                                      setState(() {
-                                        title=data['Title'];
-                                        content=data['content'];
-                                        _hint=data["ID"];
-                                        _date=data["Date & Time"];
-                                      });
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
-                                    }, child: Text(data["Title"],
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                    color: Colors.transparent,
-                                    ),
-                                  ),
-                                  Divider(height: 3,color: Colors.grey.shade400,),
-                                  
-                                ],
+                                    Divider(height: 3,color: Colors.grey.shade400,),
+                                    
+                                  ],
+                                ),
                               );
                             },
                           );
@@ -366,112 +375,113 @@ class _AccountState extends State<Account> {
                 ),
                 Expanded(
                 flex: 2,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(60, 200, 100, 60),
-                  child: Container(
-                    child: Column(children: [
-                      SizedBox(height: 30,),
-                                SizedBox(height: 20,),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  width: MediaQuery.of(context).size.width / 1.2,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 3,
-                                        child: Container(
-                                        child: Center(
-                                          child: Text("Username    :",style:TextStyle(fontSize: 20)),
-                                        ),
-                                      )),
-                                      Expanded(
-                                        flex: 3,
-                                        child: Container(
-                                          child: TextFormField(
-                                            enabled: _vi,
-                                            style: TextStyle(fontSize: 20),
-                                            controller: _usname,
-                                            decoration: InputDecoration(
-                                                border: (_vi==false)?InputBorder.none:OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-                                            ),
-                                            validator: (value) {
-                                              if (value!.isEmpty) {
-                                                return 'Enter a valid username!';
-                                              }
-                                              return null;
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: IconButton(icon: Icon((_vi == false)?Icons.edit:Icons.update),
-                                            onPressed: (){
-                                            if(_vi == true){
-                                              setState(() {
-                                                _vi = false;
-                                              });
-                                              //
-                                              FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("User Data").doc(id).update({"Username":_usname.text});
-                                              //
-                                            }
-                                            else{
-                                              setState(() {
-                                                _vi = true;
-                                              });
-                                            }
-                                            },
-                                          ),
-                                      ),
-                                    ],
-                                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              color: Colors.transparent,
+                            child: Center(
+                              child: Text("Username    :",style:TextStyle(fontSize: 20)),
+                            ),
+                          )),
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width/3,
+                              color: Colors.transparent,
+                              child: TextFormField(
+                                enabled: _vi,
+                                style: TextStyle(fontSize: 20),
+                                controller: _usname,
+                                decoration: InputDecoration(
+                                    border: (_vi==false)?InputBorder.none:OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                                 ),
-                       SizedBox(height: 20,),
-                       Container(
-                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        width: MediaQuery.of(context).size.width / 1.2,
-                        height: MediaQuery.of(context).size.height / 10.5,
-                        child: Center(child: Text("Email  : "+(FirebaseAuth.instance.currentUser!.email).toString(),style: TextStyle(fontSize: 20),)),
-                       ),
-                       SizedBox(height: 20,),
-                       Container(
-                         width: MediaQuery.of(context).size.width/1.2,
-                         height: MediaQuery.of(context).size.height/10.5,
-                         decoration: BoxDecoration(
-                           gradient: LinearGradient(
-                          colors: [Colors.pink.shade400, Colors.pink.shade300]), 
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: MaterialButton(
-                          child: Center(child: Text("Delete Account",style: TextStyle(fontSize: 20)),),
-                          onPressed: (){
-                            FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).delete().then((value) => FirebaseAuth.instance.currentUser!.delete());
-                          },
-                        ),
-                       ),
-                       SizedBox(height: 10,),
-                       Container(
-                         width: MediaQuery.of(context).size.width/1.2,
-                         height: MediaQuery.of(context).size.height/10.5,
-                         decoration: BoxDecoration(
-                           gradient: LinearGradient(
-                          colors: [Colors.pink.shade400, Colors.pink.shade300]), 
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: MaterialButton(
-                          child: Center(child: Text("Logout",style: TextStyle(fontSize: 20)),),
-                          onPressed: () async {
-                              await _auth.signOut();
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
-                          },
-                        ),
-                       ),
-                    ],),),
-                ),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Enter a valid username!';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: IconButton(icon: Icon((_vi == false)?Icons.edit:Icons.update),
+                                onPressed: (){
+                                if(_vi == true){
+                                  setState(() {
+                                    _vi = false;
+                                  });
+                                  //
+                                  FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("User Data").doc(id).update({"Username":_usname.text});
+                                  //
+                                }
+                                else{
+                                  setState(() {
+                                    _vi = true;
+                                  });
+                                }
+                                },
+                              ),
+                          ),
+                        ],
+                      ),
+                    ),
+                   SizedBox(height: 20,),
+                   Container(
+                     decoration: BoxDecoration(
+                       color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    width: MediaQuery.of(context).size.width / 3,
+                    height: MediaQuery.of(context).size.height / 10.5,
+                    child: Center(child: Text("Email  : "+(FirebaseAuth.instance.currentUser!.email).toString(),style: TextStyle(fontSize: 20),)),
+                   ),
+                   SizedBox(height: 20,),
+                   Container(
+                     width: MediaQuery.of(context).size.width/3,
+                     height: MediaQuery.of(context).size.height/12,
+                     decoration: BoxDecoration(
+                       gradient: LinearGradient(
+                      colors: [Colors.pink.shade400, Colors.pink.shade300]), 
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: MaterialButton(
+                      child: Center(child: Text("Delete Account",style: TextStyle(fontSize: 20)),),
+                      onPressed: (){
+                        FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).delete().then((value) => FirebaseAuth.instance.currentUser!.delete());
+                      },
+                    ),
+                   ),
+                   SizedBox(height: 10,),
+                   Container(
+                     width: MediaQuery.of(context).size.width/3,
+                     height: MediaQuery.of(context).size.height/12,
+                     decoration: BoxDecoration(
+                       gradient: LinearGradient(
+                      colors: [Colors.pink.shade400, Colors.pink.shade300]), 
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: MaterialButton(
+                      child: Center(child: Text("Logout",style: TextStyle(fontSize: 20)),),
+                      onPressed: () async {
+                          await _auth.signOut();
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
+                      },
+                    ),
+                   ),
+                ],),
                 ),
             ],
           ),

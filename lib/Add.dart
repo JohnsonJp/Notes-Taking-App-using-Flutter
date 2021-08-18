@@ -45,11 +45,9 @@ class _AddState extends State<Add> {
           child: ListView(
             children: [
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.black12,
-                      ),
+                child: MaterialButton(
                   onPressed: () { 
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Account()));
@@ -62,13 +60,14 @@ class _AddState extends State<Add> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
                   onPressed: () { 
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
                    },
                   child: Row(
                     children: [
@@ -78,10 +77,11 @@ class _AddState extends State<Add> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
                   onPressed: () {
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Trash()));
@@ -94,10 +94,11 @@ class _AddState extends State<Add> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
                   onPressed: () async {
                     await _auth.signOut();
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
@@ -110,7 +111,7 @@ class _AddState extends State<Add> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400,),
             ],
       ),
         ),
@@ -133,7 +134,7 @@ class _AddState extends State<Add> {
                   controller: _title,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 2.5),
+                      borderSide: BorderSide(width: 2.5,color: Colors.grey.shade400),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
@@ -153,7 +154,7 @@ class _AddState extends State<Add> {
                   controller: _content,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 2.5),
+                      borderSide: BorderSide(width: 2.5,color: Colors.grey.shade400),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
@@ -203,7 +204,7 @@ class _AddState extends State<Add> {
                             }
                         );
                       });
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
                     },
                     child: Text("Add",style: TextStyle(fontSize: 20),)),
               ),
@@ -232,7 +233,8 @@ class _AddState extends State<Add> {
                       flex: 1,
                       child: (_search==false)?
                       Container(
-                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,                      child: Row(
+                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
+                          child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -317,30 +319,32 @@ class _AddState extends State<Add> {
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               DocumentSnapshot data = snapshot.data!.docs[index];
-                              return Column(
-                                children: [
-                                  Container(height: MediaQuery.of(context).size.height/12,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black12 : Colors.white12,
+                              return SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Container(height: MediaQuery.of(context).size.height/12,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black12 : Colors.white12,
+                                      ),
+                                      child: MaterialButton(onPressed: () {
+                                        setState(() {
+                                          title=data['Title'];
+                                          content=data['content'];
+                                          _hint=data["ID"];
+                                          _date=data["Date & Time"];
+                                        });
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
+                                      }, child: Text(data["Title"],
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      color: Colors.transparent,
+                                      ),
                                     ),
-                                    child: MaterialButton(onPressed: () {
-                                      setState(() {
-                                        title=data['Title'];
-                                        content=data['content'];
-                                        _hint=data["ID"];
-                                        _date=data["Date & Time"];
-                                      });
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
-                                    }, child: Text(data["Title"],
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                    color: Colors.transparent,
-                                    ),
-                                  ),
-                                  Divider(height: 3,color: Colors.grey.shade400,),
-                                  
-                                ],
+                                    Divider(height: 3,color: Colors.grey.shade400,),
+                                    
+                                  ],
+                                ),
                               );
                             },
                           );
@@ -352,118 +356,113 @@ class _AddState extends State<Add> {
                 ),
                 Expanded(
                 flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(100, 200, 100, 200),
-                  child: Container(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height / 12,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height / 12,
+                      width: MediaQuery.of(context).size.width / 3,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: TextField(
+                        style: TextStyle(fontSize: 20),
+                        controller: _title,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blueGrey.shade400,width: 2.5),
+                            borderRadius: BorderRadius.circular(25),
                           ),
-                          child: TextField(
-                            style: TextStyle(fontSize: 20),
-                            controller: _title,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blueGrey.shade400,width: 2.5),
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                      borderSide: BorderSide(
-                                        color: Colors.pink,
-                                        width: 1.5,
-                                      ),
-                                    ),
-                              hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                              hintText: 'Title',
-                            ),
-                          ),
+                          border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  borderSide: BorderSide(
+                                    color: Colors.pink,
+                                    width: 1.5,
+                                  ),
+                                ),
+                          hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                          hintText: 'Title',
                         ),
-                        SizedBox(height: 10,),
-                        Container(
-                          height: MediaQuery.of(context).size.height / 12,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          child: TextField(
-                            style: TextStyle(fontSize: 20),
-                            controller: _content,
-                            keyboardType: TextInputType.multiline,
-                            minLines: 1,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blueGrey.shade400,width: 2.5),
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                      borderSide: BorderSide(
-                                        color: Colors.pink,
-                                        width: 1.5,
-                                      ),
-                                    ),
-                              hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                              hintText: 'Content',
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-
-                        Container(
-                          height: MediaQuery.of(context).size.height / 14,
-                          width: MediaQuery.of(context).size.width/2,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.pink.shade400, Colors.pink.shade300]),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          
-                          child: MaterialButton(
-                              onPressed: () {
-                                //
-                                List<String> key = [];
-                                String temp = "";
-                                for (int i = 0; i < _title.text.length; i++) {
-                                  temp = temp + _title.text[i].toUpperCase();
-                                  key.add(temp);
-                                }
-                                temp="";
-                                for (int i = 0; i < _title.text.length; i++) {
-                                  temp = temp + _title.text[i].toLowerCase();
-                                  key.add(temp);
-                                }
-                                //
-                                var firebaseUser =  FirebaseAuth.instance.currentUser;
-                                FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("notes").add(
-                                    {
-                                      "Title" : _title.text,
-                                      "content":_content.text,
-                                      "ID":" ",
-                                      "Date & Time":DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
-                                      "Key":key,
-                                    }
-                                ).then((value){
-                                  FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("notes").doc(value.id).update(
-                                      {
-                                        "ID":value.id,
-                                      }
-                                  );
-                                });
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
-                              },
-                              child: Text("Add",style: TextStyle(fontSize: 20),)),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-              ),
+                    SizedBox(height: 10,),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 3,
+                      height: MediaQuery.of(context).size.height / 12,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      child: TextField(
+                        style: TextStyle(fontSize: 20),
+                        controller: _content,
+                        keyboardType: TextInputType.multiline,
+                        minLines: 1,
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blueGrey.shade400,width: 2.5),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  borderSide: BorderSide(
+                                    color: Colors.pink,
+                                    width: 1.5,
+                                  ),
+                                ),
+                          hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                          hintText: 'Content',
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+
+                    Container(
+                      height: MediaQuery.of(context).size.height / 14,
+                      width: MediaQuery.of(context).size.width / 3,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.pink.shade400, Colors.pink.shade300]),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      
+                      child: MaterialButton(
+                          onPressed: () {
+                            //
+                            List<String> key = [];
+                            String temp = "";
+                            for (int i = 0; i < _title.text.length; i++) {
+                              temp = temp + _title.text[i].toUpperCase();
+                              key.add(temp);
+                            }
+                            temp="";
+                            for (int i = 0; i < _title.text.length; i++) {
+                              temp = temp + _title.text[i].toLowerCase();
+                              key.add(temp);
+                            }
+                            //
+                            var firebaseUser =  FirebaseAuth.instance.currentUser;
+                            FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("notes").add(
+                                {
+                                  "Title" : _title.text,
+                                  "content":_content.text,
+                                  "ID":" ",
+                                  "Date & Time":DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
+                                  "Key":key,
+                                }
+                            ).then((value){
+                              FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("notes").doc(value.id).update(
+                                  {
+                                    "ID":value.id,
+                                  }
+                              );
+                            });
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
+                          },
+                          child: Text("Add",style: TextStyle(fontSize: 20),)),
+                    ),
+                  ],
                 ),
                 ),
             ],

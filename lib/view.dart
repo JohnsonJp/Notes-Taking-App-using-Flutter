@@ -56,7 +56,7 @@ class _ViewState extends State<View> {
       appBar: (widget.where==true)?
 
       AppBar(
-          backgroundColor: Colors.black54,
+          backgroundColor: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
           title: Text("View"),
           actions: [
             IconButton(onPressed: (){
@@ -73,7 +73,7 @@ class _ViewState extends State<View> {
                   }).then((value) => FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("notes").doc(id).delete()),
               );
               
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
             }, icon: Icon(Icons.delete)),
             IconButton(onPressed: () async {
               if(_edit == true){
@@ -118,7 +118,7 @@ class _ViewState extends State<View> {
       ):
       // Trash view
       AppBar(
-          backgroundColor: Colors.black54,
+          backgroundColor: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
           title: Text("View"),
           actions: [
             IconButton(onPressed: (){
@@ -140,6 +140,7 @@ class _ViewState extends State<View> {
                 FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("notes").doc(value.id).update({"ID":value.id})
                 ).then((value) => FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("Trash").doc(id).delete());
                 //
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
             },
               icon: Icon(Icons.update),
             ),
@@ -151,11 +152,10 @@ class _ViewState extends State<View> {
           child: ListView(
             children: [
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.black12,
-                      ),
+                child: MaterialButton(
+                  
                   onPressed: () { 
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Account()));
@@ -168,16 +168,14 @@ class _ViewState extends State<View> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.black12,
-                      ),
+                child: MaterialButton(
                   onPressed: () { 
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
                    },
                   child: Row(
                     children: [
@@ -187,13 +185,12 @@ class _ViewState extends State<View> {
                   ),
                 ),
               ),
-              Divider(height: 2),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black12,
-                  ),
+                child: MaterialButton(
+                  
                   onPressed: () {
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Trash()));
@@ -206,8 +203,9 @@ class _ViewState extends State<View> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
                 child: ElevatedButton(
                   onPressed: () async {
@@ -222,7 +220,6 @@ class _ViewState extends State<View> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
             ],
       ),
         ),
@@ -239,14 +236,13 @@ class _ViewState extends State<View> {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width / 1.4,
-                height: MediaQuery.of(context).size.height / 12,
+                height: MediaQuery.of(context).size.height / 11,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("Last edited time : "+'''
-                  '''+widget.date,textAlign:TextAlign.center,style: TextStyle(fontSize: 20,),),
+                  child: Text("Last edited time : \n"+widget.date,textAlign:TextAlign.center,style: TextStyle(fontSize: 20,),),
                 ),
               ),
               SizedBox(
@@ -255,9 +251,6 @@ class _ViewState extends State<View> {
               Container(
                 width: MediaQuery.of(context).size.width / 1.4,
                 height: MediaQuery.of(context).size.height / 12,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
                 child: TextFormField(
                   style: TextStyle(fontSize: 20),
                   controller: _title,
@@ -276,9 +269,6 @@ class _ViewState extends State<View> {
               Container(
                 width: MediaQuery.of(context).size.width / 1.4,
                 height: MediaQuery.of(context).size.height / 10,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
                 child: TextFormField(
                   style: TextStyle(fontSize: 20),
                   enabled: _edit,
@@ -307,14 +297,10 @@ class _ViewState extends State<View> {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width / 1.4,
-                height: MediaQuery.of(context).size.height / 12,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
+                height: MediaQuery.of(context).size.height / 11,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("Deleted on  : "+'''
-                  '''+widget.date,textAlign:TextAlign.center,style: TextStyle(fontSize: 20),),
+                  child: Text("Deleted on  : \n"+widget.date,textAlign:TextAlign.center,style: TextStyle(fontSize: 20),),
                 ),
               ),
               SizedBox(
@@ -323,9 +309,6 @@ class _ViewState extends State<View> {
               Container(
                 width: MediaQuery.of(context).size.width / 1.4,
                 height: MediaQuery.of(context).size.height / 12,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
                 child: TextFormField(
                   style: TextStyle(fontSize: 20),
                   controller: _title,
@@ -344,9 +327,6 @@ class _ViewState extends State<View> {
               Container(
                 width: MediaQuery.of(context).size.width / 1.4,
                 height: MediaQuery.of(context).size.height / 10,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
                 child: TextFormField(
                   style: TextStyle(fontSize: 20),
                   enabled: _edit,
@@ -481,30 +461,32 @@ class _ViewState extends State<View> {
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               DocumentSnapshot data = snapshot.data!.docs[index];
-                              return Column(
-                                children: [
-                                  Container(height: MediaQuery.of(context).size.height/12,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black12 : Colors.white12,
+                              return SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Container(height: MediaQuery.of(context).size.height/12,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black12 : Colors.white12,
+                                      ),
+                                      child: MaterialButton(onPressed: () {
+                                        setState(() {
+                                          title=data['Title'];
+                                          content=data['content'];
+                                          _hint=data["ID"];
+                                          _date=data["Date & Time"];
+                                        });
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true,)));
+                                      }, child: Text(data["Title"],
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      color: Colors.transparent,
+                                      ),
                                     ),
-                                    child: MaterialButton(onPressed: () {
-                                      setState(() {
-                                        title=data['Title'];
-                                        content=data['content'];
-                                        _hint=data["ID"];
-                                        _date=data["Date & Time"];
-                                      });
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true,)));
-                                    }, child: Text(data["Title"],
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                    color: Colors.transparent,
-                                    ),
-                                  ),
-                                  Divider(height: 3,color: Colors.grey.shade400,),
-                                  
-                                ],
+                                    Divider(height: 3,color: Colors.grey.shade400,),
+                                    
+                                  ],
+                                ),
                               );
                             },
                           );
@@ -525,7 +507,7 @@ class _ViewState extends State<View> {
                           Expanded(flex: 1,child: Container()),
                           Expanded(child: Text("Trash",style: TextStyle(fontSize: 30),),flex: 6,),
                           Expanded(flex: 1,child: Center(child: IconButton(onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
                           }, 
                           icon: Icon(Icons.home,semanticLabel: "Go to Home",)))),
                           Expanded(
@@ -551,6 +533,11 @@ class _ViewState extends State<View> {
                                 style: TextStyle(fontSize: 20),
                                 controller: _sea,                                
                                 decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
                                   suffixIcon: IconButton(onPressed: (){
                                     if(_search == false){
                                     setState(() {
@@ -596,29 +583,31 @@ class _ViewState extends State<View> {
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               DocumentSnapshot data = snapshot.data!.docs[index];
-                              return Column(
-                                children: [
-                                  Container(height: MediaQuery.of(context).size.height/12,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black45 : Colors.white38,
+                              return SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Container(height: MediaQuery.of(context).size.height/12,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black45 : Colors.white38,
+                                      ),
+                                      child: MaterialButton(onPressed: () {
+                                        setState(() {
+                                          _title.text=data['Title'];
+                                          _content.text=data['content'];
+                                          _hint=data["ID"];
+                                          _date=data["Date & Time"];
+                                        });
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
+                                      }, child: Text(data["Title"],
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      color: Colors.transparent,
+                                      ),
                                     ),
-                                    child: MaterialButton(onPressed: () {
-                                      setState(() {
-                                        _title.text=data['Title'];
-                                        _content.text=data['content'];
-                                        _hint=data["ID"];
-                                        _date=data["Date & Time"];
-                                      });
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
-                                    }, child: Text(data["Title"],
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                    color: Colors.transparent,
-                                    ),
-                                  ),
-                                  Divider(height: 2,color: Colors.grey.shade400,),
-                                ],
+                                    Divider(height: 2,color: Colors.grey.shade400,),
+                                  ],
+                                ),
                               );
                             },
                           );
@@ -667,14 +656,14 @@ class _ViewState extends State<View> {
                                         "content":_content.text,
                                         "Date & Time":DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
                                         "ID":"",
-                                        "key":key,
+                                        "Key":key,
                                       }).then((value) => FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("Trash").doc(value.id).update(
                                       {
                                         "ID":value.id,
                                       }).then((value) => FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("notes").doc(id).delete()),
                                   );
                                   
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
                                   }, icon: Icon(Icons.delete)),
                                 ),
                               Expanded(
@@ -738,11 +727,10 @@ class _ViewState extends State<View> {
                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>Trash()));
                               }, icon: Icon(Icons.delete)),
                               ),
-                            Expanded(
-                              flex: 1,
-                              child: IconButton(onPressed: () async {
-                                  //
-                                  List<String> key = [];
+                              Expanded(
+                                child:IconButton(onPressed: () async {
+                                //
+                                List<String> key = [];
                                 String temp = "";
                                 for (int i = 0; i < _title.text.length; i++) {
                                   temp = temp + _title.text[i].toUpperCase();
@@ -753,25 +741,24 @@ class _ViewState extends State<View> {
                                   temp = temp + _title.text[i].toLowerCase();
                                   key.add(temp);
                                 }
-                                  //
-                                  var firebaseUser =  FirebaseAuth.instance.currentUser;
-                                  FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("notes").add(
-                                      {
-                                        "Title" : _title.text,
-                                        "content":_content.text,
-                                        "Date & Time":DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
-                                        "ID":"",
-                                        "Key":key,
-                                      }
-                                  ).then((value) =>
-                                  FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("notes").doc(value.id).update({"ID":value.id})
-                                  ).then((value) => FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("Trash").doc(id).delete());
-                                  //
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Trash()));
-                              },
-                                icon: Icon(Icons.update),
+                                var firebaseUser =  FirebaseAuth.instance.currentUser;
+                                FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).collection("notes").add(
+                                    {
+                                      "Title" : _title.text,
+                                      "content":_content.text,
+                                      "Date & Time":DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
+                                      "ID":"",
+                                      "Key":key,
+                                    }
+                                ).then((value) =>
+                                FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("notes").doc(value.id).update({"ID":value.id})
+                                ).then((value) => FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).collection("Trash").doc(id).delete());
+                                //
+                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
+                            },
+                              icon: Icon(Icons.update),
+                            ), 
                               ),
-                            ),
                             ],
                           ),
                         ),
@@ -779,119 +766,111 @@ class _ViewState extends State<View> {
                       ),
                       Expanded(
                         flex: 9,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(100, 200, 100, 200),
-                          child: (widget.where==true)
-                              ?Container(
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: MediaQuery.of(context).size.width / 1.4,
-                                    height: MediaQuery.of(context).size.height / 12,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: Text("Last edited time : "+'''
-                                      '''+widget.date,textAlign:TextAlign.center,style: TextStyle(fontSize: 20,),),
-                                    ),
+                        child: (widget.where==true)
+                            ?Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  height: MediaQuery.of(context).size.height / 9,
+                                  
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Text("Last edited time : \n"+widget.date,textAlign:TextAlign.center,style: TextStyle(fontSize: 20,),),
                                   ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  TextFormField(
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                   width: MediaQuery.of(context).size.width / 3,
+                                  child: TextFormField(
                                     style: TextStyle(fontSize: 20),
                                     controller: _title,
                                     enabled: _edit,
                                     
                                     decoration: InputDecoration(
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(width: 2.5),
+                                        
+                                        borderSide: BorderSide(width: 2,color: Colors.pink),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
                                       hintText: 'Title',
                                     ),
                                   ),
-                                  SizedBox(height: 10,),
-                                  TextFormField(
+                                ),
+                                SizedBox(height: 10,),
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  child: TextFormField(
                                     style: TextStyle(fontSize: 20),
                                     enabled: _edit,
                                     controller: _content,
                                     decoration: InputDecoration(
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(width: 2.5),
+                                        borderSide: BorderSide(width: 2.5,color: Colors.pink),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
                                       hintText: 'Content',
                                     ),
                                   ),
-                                  SizedBox(height: 10,),
-                                ],
-                              ),
+                                ),
+                                SizedBox(height: 10,),
+                              ],
+                            )
+                      :Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3,
+                            height: MediaQuery.of(context).size.height / 9,
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text("Deleted On : \n"+widget.date,textAlign:TextAlign.center,style: TextStyle(fontSize: 20,),),
                             ),
-                          )
-               :Container(
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: MediaQuery.of(context).size.width / 1.4,
-                                    height: MediaQuery.of(context).size.height / 12,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: Text("Last edited time : "+'''
-                                      '''+widget.date,textAlign:TextAlign.center,style: TextStyle(fontSize: 20,),),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  TextFormField(
-                                    style: TextStyle(fontSize: 20),
-                                    controller: _title,
-                                    enabled: _edit,
-                                    decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(width: 2.5),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                                      hintText: 'Title',
-                                    ),
-                                  ),
-                                  SizedBox(height: 10,),
-                                  TextFormField(
-                                    style: TextStyle(fontSize: 20),
-                                    enabled: _edit,
-                                    controller: _content,
-                                    decoration: InputDecoration(
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(width: 2.5),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                                      hintText: 'Content',
-                                    ),
-                                  ),
-                                  SizedBox(height: 10,),
-                                ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: TextFormField(
+                              style: TextStyle(fontSize: 20),
+                              controller: _title,
+                              enabled: _edit,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(width: 2.5,color: Colors.pink),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                                hintText: 'Title',
                               ),
                             ),
                           ),
-                        ),
+                          SizedBox(height: 10,),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: TextFormField(
+                              style: TextStyle(fontSize: 20),
+                              enabled: _edit,
+                              controller: _content,
+                              decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(width: 2.5,color: Colors.pink),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                hintStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                                hintText: 'Content',
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                        ],
+                      ),
                       ),
                     ],
                   ),

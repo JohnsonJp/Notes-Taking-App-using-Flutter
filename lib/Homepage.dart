@@ -17,7 +17,7 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  TextEditingController _sea=new TextEditingController(text: "");
+  TextEditingController _sea=new TextEditingController();
   var firebaseUser =  FirebaseAuth.instance.currentUser;
   var title;
   var content;
@@ -36,6 +36,7 @@ class _HomepageState extends State<Homepage> {
       children: <Widget>[
         new Scaffold(
       appBar: AppBar(
+        backgroundColor: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
         title: appBarTitle,
         actions: [
           IconButton(onPressed: (){
@@ -78,8 +79,9 @@ class _HomepageState extends State<Homepage> {
           child: ListView(
             children: [
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
                   onPressed: () { 
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Account()));
@@ -92,13 +94,14 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ),
               ),
-              Divider(height: 2,),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
                   onPressed: () { 
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Homepage()), (route) => false);
                    },
                   child: Row(
                     children: [
@@ -108,10 +111,11 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ),
               ),
-              Divider(height: 2),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
                   onPressed: () {
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Trash()));
@@ -124,10 +128,11 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ),
               ),
-              Divider(height: 2),
+              Divider(height: 2,color: Colors.grey.shade400,),
               Container(
+                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
                 height: MediaQuery.of(context).size.height/12,
-                child: ElevatedButton(
+                child: MaterialButton(
                   onPressed: () async {
                     await _auth.signOut();
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
@@ -140,7 +145,7 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ),
               ),
-              Divider(height: 2),
+              Divider(height: 2,color: Colors.grey.shade400,),
             ],
       ),
         ),
@@ -165,28 +170,30 @@ class _HomepageState extends State<Homepage> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 DocumentSnapshot data = snapshot.data!.docs[index];
-                return Column(
-                  children: [
-                    Divider(height: 2),
-                    Container(height: MediaQuery.of(context).size.height/12,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Divider(height: 2,color: Colors.grey.shade400,),
+                      Container(height: MediaQuery.of(context).size.height/12,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
+                        ),
+                        child: MaterialButton(onPressed: () {
+                          setState(() {
+                            title=data['Title'];
+                            content=data['content'];
+                            _hint=data["ID"];
+                            _date=data["Date & Time"];
+                          });
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
+                        }, child: Text(data["Title"],
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        ),
                       ),
-                      child: ElevatedButton(onPressed: () {
-                        setState(() {
-                          title=data['Title'];
-                          content=data['content'];
-                          _hint=data["ID"];
-                          _date=data["Date & Time"];
-                        });
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
-                      }, child: Text(data["Title"],
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               },
             );
@@ -221,7 +228,8 @@ class _HomepageState extends State<Homepage> {
                       flex: 1,
                       child: (_search==false)?
                       Container(
-                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,                      child: Row(
+                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black38 : Colors.white38,
+                          child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -265,6 +273,12 @@ class _HomepageState extends State<Homepage> {
                                   style: TextStyle(fontSize: 20),
                                   controller: _sea,                                
                                   decoration: InputDecoration(
+                                    
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
                                     suffixIcon: IconButton(onPressed: (){
                                       if(_search == false){
                                       setState(() {
@@ -310,30 +324,32 @@ class _HomepageState extends State<Homepage> {
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               DocumentSnapshot data = snapshot.data!.docs[index];
-                              return Column(
-                                children: [
-                                  Container(height: MediaQuery.of(context).size.height/12,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black12 : Colors.white12,
+                              return SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Container(height: MediaQuery.of(context).size.height/12,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black12 : Colors.white12,
+                                      ),
+                                      child: MaterialButton(onPressed: () {
+                                        setState(() {
+                                          title=data['Title'];
+                                          content=data['content'];
+                                          _hint=data["ID"];
+                                          _date=data["Date & Time"];
+                                        });
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
+                                      }, child: Text(data["Title"],
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      color: Colors.transparent,
+                                      ),
                                     ),
-                                    child: MaterialButton(onPressed: () {
-                                      setState(() {
-                                        title=data['Title'];
-                                        content=data['content'];
-                                        _hint=data["ID"];
-                                        _date=data["Date & Time"];
-                                      });
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>View(title,content,_hint,_date,true)));
-                                    }, child: Text(data["Title"],
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                    color: Colors.transparent,
-                                    ),
-                                  ),
-                                  Divider(height: 3,color: Colors.grey.shade400,),
-                                  
-                                ],
+                                    Divider(height: 3,color: Colors.grey.shade400,),
+                                    
+                                  ],
+                                )                                
                               );
                             },
                           );
